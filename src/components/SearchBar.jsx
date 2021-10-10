@@ -2,44 +2,42 @@ import React from "react";
 import useLocationQuery from "../hooks/useLocationQuery";
 import Location from "./Location";
 
-export default function SearchBar({}) {
+export default function SearchBar({ setSelectedLocInfo, searchCategory }) {
   const [isSearching, setIsSearching] = React.useState(true);
-  const [chosenLoc, setChosenLoc] = React.useState({});
   const [locQuery, setLocQuery] = React.useState("");
 
-  const { data, isFetching, isError, isSuccess } = useLocationQuery({
+  const { data, isFetching } = useLocationQuery({
     locQuery,
   });
   console.log(data);
 
-  if (isSearching) {
-    if (isFetching)
-      return <p className="article-preview">Loading locations...</p>;
-    if (isError)
-      return <p className="article-preview">Loading locations failed :(</p>;
-  }
-
   return (
     <>
       <label>
-        QUERY LOCATION isSearching ?
+        {searchCategory}
         <input
           type="text"
-          onChange={(e) => {
+          value={locQuery}
+          onChange={async (e) => {
             console.log(e.target.value);
             setLocQuery(e.target.value);
           }}
+          onFocus={() => (isSearching ? null : setIsSearching(true))}
         ></input>
       </label>
-      {data?.map((loc) => (
-        <Location loc setChosenLoc setIsSearching />
-      ))}{" "}
-      :{" "}
-      <input
-        type="text"
-        value={chosenLoc}
-        onFocus={() => (isSearching ? null : setIsSearching(true))}
-      ></input>
+      {locQuery !== "" && isFetching && isSearching ? (
+        <p className="article-preview">Loading locations...</p>
+      ) : (
+        isSearching &&
+        data?.map((loc) => (
+          <Location
+            loc={loc}
+            setLocQuery={setLocQuery}
+            setIsSearching={setIsSearching}
+            setSelectedLocInfo={setSelectedLocInfo}
+          />
+        ))
+      )}
     </>
   );
 }

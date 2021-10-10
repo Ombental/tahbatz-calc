@@ -1,26 +1,24 @@
 // import Iframe from "react-iframe";
 import "./App.css";
 import React from "react";
-import Row from "./components/Row";
-import SearchBar from "./components/SearchBar";
+import Trip from "./components/Trip";
 
 function App() {
-  const [isRavPassShown, setIsRavPassShown] = React.useState(true);
-  const [rows, setRows] = React.useState([]);
-  const [profileType, setProfileType] = React.useState("");
+  const [trips, setTrips] = React.useState([]);
+  const [profileType, setProfileType] = React.useState("student");
 
   const handleProfileChange = (event) => {
-    setProfileType(event.target.value);
+    // setProfileType(event.target.value);
     console.log(event.target.value);
   };
 
-  const handleDeleteRow = (index) => {
-    const newRows = [...rows];
-    newRows.splice(index, 1);
-    setRows(newRows);
+  const handleDeleteTrip = (index) => {
+    const newTrips = [...trips];
+    newTrips.splice(index, 1);
+    setTrips(newTrips);
   };
-  const handleAddRow = () => {
-    setRows([...rows, {}]);
+  const handleAddTrip = () => {
+    setTrips([...trips, {}]);
     // "success" animation, then hide row ==> add row == "next plan"
     // then when finished go to "summary" view
   };
@@ -30,7 +28,6 @@ function App() {
       <header className="App-header">
         <p>מחשבון פרופיל לתחב"צ</p>
       </header>
-      {/* use z index to "show" and "hide" */}
       <label>
         Profile
         <select value={profileType} onChange={handleProfileChange}>
@@ -39,32 +36,18 @@ function App() {
           <option value="else">אחר</option>
         </select>
       </label>
-      {rows.map((row, index) => {
+      {trips.map((trip, index) => {
         return (
           <li>
-            <Row divId={index} />
+            <Trip key={index} divId={index} />
             {/* <button onClick={() => handleSubmitRow(index)}>SUBMIT</button> */}
-            <button onClick={() => handleDeleteRow(index)}>X</button>
+            <button onClick={() => handleDeleteTrip(index)}>X</button>
           </li>
         );
       })}
-      <button onClick={() => handleAddRow()}>הוספת נסיעה</button>
+      <button onClick={() => handleAddTrip()}>הוספת נסיעה</button>
       <br></br>
       <br></br>
-      <SearchBar />
-      {/* <button onClick={() => setIsRavPassShown(!isRavPassShown)}>
-        TOGGLE RAV PASS
-      </button>
-      {isRavPassShown && (
-        <Iframe
-          url="https://prices.ravpass.co.il/"
-          width="95%"
-          height="700px"
-          id="myId"
-          display="block"
-          position="fixed"
-        />
-      )} */}
     </div>
   );
 }

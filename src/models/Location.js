@@ -17,3 +17,6 @@ class Location {
 }
 
 export default Location;
+
+// if formattedAddress.includes('description') ==> only formattedAddress. else: description + " " + formattedAddress
+// (line before)+"::"+lat+","+lng
