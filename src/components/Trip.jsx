@@ -1,16 +1,15 @@
 import React from "react";
+import axios from "axios";
 import classNames from "classnames";
 import SearchBar from "./SearchBar";
-import PathList from "./PathList";
-import usePriceCalculate from "../hooks/usePriceCalculate";
+import { prepareRequestBody, prepareInitialFilters } from "../utils";
 
-export default function Trip({ divId }) {
+export default function Trip({ tripId, handleUpdateTrip }) {
   const [fromPlace, setFromPlace] = React.useState(null);
   const [toPlace, setToPlace] = React.useState(null);
   const [numDays, setNumDays] = React.useState("");
   const [numBackAndForthDays, setNumBackAndForthDays] = React.useState("");
   const [finishedTrip, setFinishedTrip] = React.useState(false);
-  // const [prices, setPrices] = React.useState([]);
 
   const handleInput = (e, setFunction) => {
     if (e.target.validity.valid) {
@@ -18,43 +17,48 @@ export default function Trip({ divId }) {
     }
   };
 
-  const handleFinishedTrip = () => {
-    if (
-      numBackAndForthDays === "" ||
-      numDays === "" ||
-      fromPlace === null ||
-      toPlace === null
-    ) {
-      alert("כל השדות צריכים להיות מלאים...");
-      return;
-    } else if (numBackAndForthDays > numDays) {
-      alert("יש יותר ימי הלוך ושוב מימי נסיעה... נא לתקן");
-      return;
-    }
-    setFinishedTrip(true);
-  };
-
   const handleEditTrip = () => {
     setFinishedTrip(false);
   };
 
-  React.useEffect(() => {
-    if (!finishedTrip) return;
-    // PUT EVERYTHING HERE AND HAVE A FUNCTION THAT HELPS WITH IT ***OR*** WRITE CUSTOM HOOK
-  }, [finishedTrip]);
-  usePriceCalculate(fromPlace, toPlace);
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    if (numBackAndForthDays > numDays) {
+      alert("יש יותר ימי הלוך ושוב מימי נסיעה... נא לתקן");
+      return;
+    }
+    setFinishedTrip(true);
+
+    const initialFilters = prepareInitialFilters();
+    const { data: initialDirectionsData } = await axios.get("/directions", {
+      params: { fromPlace: fromPlace, toPlace: toPlace, ...initialFilters },
+    });
+    const directionData = initialDirectionsData.plan.itineraries;
+    const prices = [];
+    for (const route of directionData) {
+      const requestBody = prepareRequestBody(route);
+      const { data } = await axios.post("/pricecalc", {
+        lang: "he",
+        os: "browser",
+        ...requestBody,
+      });
+      prices.push(data);
+    }
+    handleUpdateTrip(tripId, prices);
+  };
+
   if (!finishedTrip) {
     return (
-      <div dir="rtl" id={divId}>
+      <form dir="rtl" onSubmit={handleOnSubmit}>
         <SearchBar
           setSelectedLocInfo={setFromPlace}
           query={fromPlace}
-          searchCategory="מ"
+          searchCategory="from"
         />
         <SearchBar
           setSelectedLocInfo={setToPlace}
           query={toPlace}
-          searchCategory="אל"
+          searchCategory="to"
         />
         <br></br>
         <label>
@@ -64,6 +68,7 @@ export default function Trip({ divId }) {
             pattern="[0-9]*"
             value={numDays}
             onInput={(e) => handleInput(e, setNumDays)}
+            required
           ></input>
         </label>
         <label>
@@ -73,25 +78,12 @@ export default function Trip({ divId }) {
             pattern="[0-9]*"
             value={numBackAndForthDays}
             onInput={(e) => handleInput(e, setNumBackAndForthDays)}
+            required
           ></input>
         </label>
         <br></br>
-        {/* {fromPlace && toPlace && (
-          <PathList
-            fromPlace={fromPlace}
-            toPlace={toPlace}
-            // setPrices={setPrices}
-          />
-        )} */}
-        {/* {prices.length > 0 && (
-          <>
-            <button onClick={handleFinishedTrip}>FINISHED THIS TRIP</button>
-            <button onClick={() => console.log(prices)}>PRICES</button>
-            <br></br>
-            <br></br>
-          </>
-        )} */}
-      </div>
+        <input type="submit" value="סיימתי עם הנסיעה הזאת"></input>
+      </form>
     );
   } else {
     return (

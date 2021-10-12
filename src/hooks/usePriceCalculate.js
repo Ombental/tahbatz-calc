@@ -5,6 +5,7 @@ export default function usePriceCalculate(fromPlace, toPlace) {
   const [prices, setPrices] = React.useState([]);
   const [directionData, setDirectionData] = React.useState(null);
 
+  function updateDirectionData() {}
   const tempDate = new Date();
   while (tempDate.getDay > 5) {
     tempDate.setDate((tempDate.getDate() + 1) % 28);
@@ -36,7 +37,7 @@ export default function usePriceCalculate(fromPlace, toPlace) {
         const { data } = await axios.get("/directions", {
           params: { fromPlace: fromPlace, toPlace: toPlace, ...initialFilters },
         });
-        setDirectionData(data);
+        setDirectionData(data.plan.itineraries);
       }
       getDirectionData();
     }
@@ -53,25 +54,24 @@ export default function usePriceCalculate(fromPlace, toPlace) {
     }
 
     async function getPrices() {
-      directionData?.plan?.itineraries?.forEach((pathInfo) => {
-        let requestBody = { legs: [] };
-        pathInfo.legs.forEach((leg) => {
-          if (leg.mode !== "WALK") {
-            requestBody.legs.push({
-              startTime: leg.startTime,
-              endTime: leg.endTime,
-              route: leg.route,
-              routeId: leg.routeId,
-              agencyId: leg.agencyId,
-              fromZoneId: leg.from.zoneId,
-              fromStopCode: leg.from.stopCode,
-              toZoneId: leg.to.zoneId,
-              toStopCode: leg.to.stopCode,
-            });
-          }
-        });
-        fetchPriceData(requestBody);
+      let requestBody = { legs: [] };
+      directionData[0].legs.forEach((leg) => {
+        if (leg.mode !== "WALK") {
+          requestBody.legs.push({
+            startTime: leg.startTime,
+            endTime: leg.endTime,
+            route: leg.route,
+            routeId: leg.routeId,
+            agencyId: leg.agencyId,
+            fromZoneId: leg.from.zoneId,
+            fromStopCode: leg.from.stopCode,
+            toZoneId: leg.to.zoneId,
+            toStopCode: leg.to.stopCode,
+          });
+        }
       });
+      fetchPriceData(requestBody);
+      updateDirectionData();
     }
     if (directionData) getPrices();
   });

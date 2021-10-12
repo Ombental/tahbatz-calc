@@ -13,20 +13,20 @@ export default function SearchBar({
   const { data, isFetching } = useLocationQuery({
     locQuery,
   });
-  console.log(data);
 
   return (
     <>
-      <label>
+      <label htmlFor={searchCategory}>
         {searchCategory}
         <input
           type="text"
+          name={searchCategory}
           value={query ? query.split("::")[0] : locQuery}
           onChange={async (e) => {
-            console.log(e.target.value);
             setLocQuery(e.target.value);
           }}
           onFocus={() => (isSearching ? null : setIsSearching(true))}
+          required
         ></input>
       </label>
       {locQuery !== "" && isFetching && isSearching ? (
