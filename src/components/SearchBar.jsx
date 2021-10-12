@@ -2,7 +2,11 @@ import React from "react";
 import useLocationQuery from "../hooks/useLocationQuery";
 import Location from "./Location";
 
-export default function SearchBar({ setSelectedLocInfo, searchCategory }) {
+export default function SearchBar({
+  setSelectedLocInfo,
+  searchCategory,
+  query,
+}) {
   const [isSearching, setIsSearching] = React.useState(true);
   const [locQuery, setLocQuery] = React.useState("");
 
@@ -17,7 +21,7 @@ export default function SearchBar({ setSelectedLocInfo, searchCategory }) {
         {searchCategory}
         <input
           type="text"
-          value={locQuery}
+          value={query ? query.split("::")[0] : locQuery}
           onChange={async (e) => {
             console.log(e.target.value);
             setLocQuery(e.target.value);

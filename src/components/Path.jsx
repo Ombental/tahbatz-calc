@@ -1,7 +1,7 @@
 import React from "react";
 import usePriceCalcQuery from "../hooks/usePriceCalcQuery";
 
-export default function Path({ pathInfo }) {
+export default function Path({ pathInfo /*updatePrices*/ }) {
   let requestBody = { legs: [] };
   pathInfo.legs.forEach((leg) => {
     if (leg.mode !== "WALK") {
@@ -20,7 +20,9 @@ export default function Path({ pathInfo }) {
   });
 
   const { data, isFetching } = usePriceCalcQuery({ requestBody });
-
+  // if (data) {
+  //   updatePrices({});
+  // }
   return (
     <>
       {isFetching ? (
