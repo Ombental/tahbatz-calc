@@ -29,7 +29,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (numBackAndForthDays > numDays) {
-      alert("יש יותר ימי הלוך ושוב מימי נסיעה... נא לתקן");
+      alert("יש יותר ימי הלוך ושוב מימי נסיעה...נא לתקן");
       return;
     }
     setFinishedTrip(true);
