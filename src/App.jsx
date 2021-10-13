@@ -87,7 +87,7 @@ function App() {
           <p>מחשבון פרופיל לתחב"צ</p>
         </header>
         <label>
-          Profile
+          פרופיל
           <select value={profileType} onChange={handleProfileChange}>
             <option value="regular">רגיל</option>
             <option value="student">סטודנט</option>
@@ -118,7 +118,7 @@ function App() {
           <p>מחשבון פרופיל לתחב"צ</p>
         </header>
         <label>
-          Profile
+          פרופיל
           <select value={profileType} onChange={handleProfileChange}>
             <option value="regular">רגיל</option>
             <option value="student">סטודנט</option>
