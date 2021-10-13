@@ -2,7 +2,11 @@ import React from "react";
 import axios from "axios";
 import classNames from "classnames";
 import SearchBar from "./SearchBar";
-import { prepareRequestBody, prepareInitialFilters } from "../utils";
+import {
+  prepareRequestBody,
+  prepareInitialFilters,
+  sortTripPriceData,
+} from "../utils";
 
 export default function Trip({ tripId, handleUpdateTrip }) {
   const [fromPlace, setFromPlace] = React.useState(null);
@@ -13,7 +17,8 @@ export default function Trip({ tripId, handleUpdateTrip }) {
 
   const handleInput = (e, setFunction) => {
     if (e.target.validity.valid) {
-      setFunction(e.target.value);
+      console.log(typeof e.target.value);
+      setFunction(parseInt(e.target.value));
     }
   };
 
@@ -44,7 +49,12 @@ export default function Trip({ tripId, handleUpdateTrip }) {
       });
       prices.push(data);
     }
-    handleUpdateTrip(tripId, prices);
+    const sortedTripPrice = sortTripPriceData(
+      prices,
+      numDays - numBackAndForthDays,
+      numBackAndForthDays
+    );
+    handleUpdateTrip(tripId, sortedTripPrice);
   };
 
   if (!finishedTrip) {
