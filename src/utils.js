@@ -47,7 +47,6 @@ export function prepareInitialFilters() {
 }
 
 export function applyMotDiscount(currentSum) {
-  console.log(currentSum);
   let discountSum = 0;
   if (currentSum > 195.5) {
     discountSum += 195.5;
@@ -60,7 +59,6 @@ export function applyMotDiscount(currentSum) {
         console.log("");
         return discountSum + (currentSum - 587) * 0.25;
       } else {
-        console.log(discountSum + currentSum * 0.5);
         return discountSum + currentSum * 0.5;
       }
     } else {
@@ -79,7 +77,6 @@ export function sortTripPriceData(prices, numDays, numBackAndForthDays) {
     ravPassPrice: {},
   };
   for (const price of prices) {
-    // console.log(price);
     for (const profile of price.periodTickets) {
       if (sortedPriceData.allProfiles[profile.ShareCode] === undefined) {
         sortedPriceData.allProfiles[profile.ShareCode] = {
@@ -90,7 +87,6 @@ export function sortTripPriceData(prices, numDays, numBackAndForthDays) {
       }
 
       if (Object.keys(sortedPriceData.cheapestProfile).length === 0) {
-        console.log("CHEAPEST");
         sortedPriceData.cheapestProfile = {
           student: profile.AnnualStudent,
           senior: profile.MonthlySenior * 12,
@@ -160,8 +156,8 @@ export function sortTripPriceData(prices, numDays, numBackAndForthDays) {
       sortedPriceData.ravPassPrice = {
         student:
           (sortedPriceData.ravPassPrice.student +
-            price.totalMotPrice50 * numDays +
-            price.totalMot2Rides50 * numBackAndForthDays) /
+            price.totalMotPrice33 * numDays +
+            price.totalMot2Rides33 * numBackAndForthDays) /
           2,
         senior:
           (sortedPriceData.ravPassPrice.student +
