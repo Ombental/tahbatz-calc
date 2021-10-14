@@ -77,7 +77,7 @@ export function sortTripPriceData(prices, numDays, numBackAndForthDays) {
     ravPassPrice: {},
   };
   for (const price of prices) {
-    for (const profile of price.periodTickets) {
+    for (const profile of price?.periodTickets) {
       if (sortedPriceData.allProfiles[profile.ShareCode] === undefined) {
         sortedPriceData.allProfiles[profile.ShareCode] = {
           student: profile.AnnualStudent,
@@ -199,8 +199,6 @@ export function getTempYearlyProfile(trips, profileType) {
       price: trips[0].cheapestProfile[profileType],
     };
   } else {
-    // PER PROFILE CREATE PROFILE+RAVPASS ==> take profile, remove all trips that have this profile
-    // write profile + price. remaining trips -> add new line with remaining rav pass price (add sum?)
     const tempFirstAllProfiles = createSortedProfiles(trips[0].allProfiles);
     for (const profile of tempFirstAllProfiles) {
       if (
@@ -217,4 +215,40 @@ export function getTempYearlyProfile(trips, profileType) {
   return tempYearlyProfile;
 }
 
-export function getComplexPrices(trips) {}
+export function getComplexPrices(trips, profileType, sharedProfile) {
+  // PER PROFILE CREATE PROFILE+RAVPASS ==> take profile, remove all trips that have this profile
+  // write profile + price. remaining trips -> add new line with remaining rav pass price (add sum?)
+  let complexPrices = []; // [{shareCode, shareCodePrice, ravPassPrice}]
+  let allProfileCodes = {};
+
+  for (const trip of trips) {
+    for (const profile of Object.keys(trip.allProfiles)) {
+      if (
+        profile !== sharedProfile &&
+        !Object.keys(allProfileCodes).includes(profile)
+      ) {
+        allProfileCodes[profile] = trip.allProfiles[profile][profileType];
+      }
+    }
+  }
+
+  for (const profileCode of Object.keys(allProfileCodes)) {
+    let relevantTrips = trips.filter(
+      (trip) => !Object.keys(trip.allProfiles).includes(profileCode)
+    );
+    complexPrices.push({
+      shareCode: profileCode,
+      shareCodePrice: allProfileCodes[profileCode],
+      ravPassPrice:
+        applyMotDiscount(
+          relevantTrips.reduce((a, b) => a + b.ravPassPrice[profileType], 0)
+        ) * 12,
+    });
+  }
+
+  return complexPrices;
+}
+
+export function normalize(num) {
+  return (Math.round(num * 100) / 100).toFixed(0);
+}

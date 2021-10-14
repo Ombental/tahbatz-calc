@@ -8,7 +8,12 @@ import {
   sortTripPriceData,
 } from "../utils";
 
-export default function Trip({ tripId, handleUpdateTrip }) {
+export default function Trip({
+  tripId,
+  handleUpdateTrip,
+  setCanAddTrip,
+  setLoadingTripData,
+}) {
   const [fromPlace, setFromPlace] = React.useState(null);
   const [toPlace, setToPlace] = React.useState(null);
   const [numDays, setNumDays] = React.useState("");
@@ -22,7 +27,9 @@ export default function Trip({ tripId, handleUpdateTrip }) {
   };
 
   const handleEditTrip = () => {
+    console.log(toPlace, fromPlace);
     setFinishedTrip(false);
+    setCanAddTrip(false);
   };
 
   const handleOnSubmit = async (e) => {
@@ -32,6 +39,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
       return;
     }
     setFinishedTrip(true);
+    setLoadingTripData(true);
 
     const initialFilters = prepareInitialFilters();
     const { data: initialDirectionsData } = await axios.get("/directions", {
@@ -54,6 +62,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
       numBackAndForthDays
     );
     handleUpdateTrip(tripId, sortedTripPrice);
+    setLoadingTripData(false);
   };
 
   if (!finishedTrip) {
@@ -113,8 +122,6 @@ export default function Trip({ tripId, handleUpdateTrip }) {
           backAndForth: {numBackAndForthDays}
         </p>
         <button onClick={handleEditTrip}>Edit again</button>
-        <br></br>
-        <br></br>
         <br></br>
       </>
     );

@@ -28,7 +28,11 @@ export default function SearchBar({
           onChange={async (e) => {
             setLocQuery(e.target.value);
           }}
-          onFocus={() => (isSearching ? null : setIsSearching(true))}
+          onFocus={() => {
+            if (!isSearching) {
+              setIsSearching(true);
+            }
+          }}
           required
           autoComplete="off"
           className="w-fit"

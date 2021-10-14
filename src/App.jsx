@@ -6,6 +6,7 @@ import {
   applyMotDiscount,
   getComplexPrices,
   getTempYearlyProfile,
+  normalize,
 } from "./utils";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   const [finalCalcOngoing, setFinalCalcOngoing] = React.useState(false);
   const [canAddTrip, setCanAddTrip] = React.useState(true);
   const [profileType, setProfileType] = React.useState("student");
+  const [loadingTripData, setLoadingTripData] = React.useState(false);
 
   const handleProfileChange = (event) => {
     // setProfileType(event.target.value);
@@ -24,6 +26,7 @@ function App() {
     const newTrips = [...trips];
     newTrips.splice(index, 1);
     setTrips(newTrips);
+    setCanAddTrip(true);
   };
 
   const handleAddTrip = () => {
@@ -54,7 +57,11 @@ function App() {
 
     const tempYearlyProfile = getTempYearlyProfile(trips, profileType);
 
-    const allComplexPrices = getComplexPrices(trips);
+    const allComplexPrices = getComplexPrices(
+      trips,
+      profileType,
+      tempYearlyProfile.shareCode
+    );
 
     setFinalCalcData({
       motSum: motSum,
@@ -65,7 +72,7 @@ function App() {
 
     setFinalCalcOngoing(false);
   };
-
+  console.log(trips);
   if (finalCalcData !== null) {
     return (
       <div className="App">
@@ -84,11 +91,11 @@ function App() {
         <br></br> */}
         <div>
           <h1>הסכומים השנתיים הם</h1>
-          <p>ערך צבור: {finalCalcData.ravKavSum}₪</p>
-          <p>רב-פס(אפליקציה): {finalCalcData.motSum}₪</p>
+          <p>ערך צבור: {normalize(finalCalcData.ravKavSum)}₪</p>
+          <p>רב-פס(אפליקציה): {normalize(finalCalcData.motSum)}₪</p>
           <p>
-            חופשי שנתי סטודנטיאלי: {finalCalcData.yearlyProfile.price}₪{" "}
-            <br></br>
+            חופשי שנתי סטודנטיאלי:{" "}
+            {normalize(finalCalcData.yearlyProfile.price)}₪ <br></br>
             {finalCalcData.yearlyProfile.shareCode} קוד פרופיל
           </p>
         </div>
@@ -102,8 +109,13 @@ function App() {
               <>
                 <p className="complex-price-box">
                   קוד פרופיל: {complexPrice.shareCode}, מחיר פרופיל:{" "}
-                  {complexPrice.shareCodePrice}₪{"  "}|{"  "}
-                  מחיר רב פס: {complexPrice.ravPassPrice}₪
+                  {normalize(complexPrice.shareCodePrice)}₪{"  "}|{"  "}
+                  מחיר רב פס: {normalize(complexPrice.ravPassPrice)}₪ |{"  "}
+                  סה"כ {"  "}
+                  {normalize(
+                    complexPrice.ravPassPrice + complexPrice.shareCodePrice
+                  )}
+                  ₪
                 </p>
               </>
             );
@@ -142,16 +154,19 @@ function App() {
                 key={index}
                 tripId={index}
                 handleUpdateTrip={handleUpdateTrip}
+                setCanAddTrip={setCanAddTrip}
+                setLoadingTripData={setLoadingTripData}
               />
               {/* <button onClick={() => handleSubmitRow(index)}>SUBMIT</button> */}
               <button onClick={() => handleDeleteTrip(index)}>X</button>
+              <hr></hr>
             </li>
           );
         })}
-        {canAddTrip ||
-          (trips.length === 0 && (
-            <button onClick={() => handleAddTrip()}>הוספת נסיעה</button>
-          ))}
+        {loadingTripData && <h1>LOADING</h1>}
+        {(canAddTrip || trips.length === 0) && (
+          <button onClick={() => handleAddTrip()}>הוספת נסיעה</button>
+        )}
         <br></br>
         <br></br>
         <br></br>
