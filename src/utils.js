@@ -185,3 +185,34 @@ export function createSortedProfiles(profiles) {
   });
   return Array.from(sortable, (x) => x[0]);
 }
+
+export function getTempYearlyProfile(trips, profileType) {
+  const tempFirstCheapestShareCode = trips[0].cheapestProfile.shareCode;
+  let tempYearlyProfile = {};
+  if (
+    trips.every(
+      (trip) => trip.cheapestProfile.shareCode === tempFirstCheapestShareCode
+    )
+  ) {
+    tempYearlyProfile = {
+      shareCode: trips[0].cheapestProfile.shareCode,
+      price: trips[0].cheapestProfile[profileType],
+    };
+  } else {
+    // PER PROFILE CREATE PROFILE+RAVPASS ==> take profile, remove all trips that have this profile
+    // write profile + price. remaining trips -> add new line with remaining rav pass price (add sum?)
+    const tempFirstAllProfiles = createSortedProfiles(trips[0].allProfiles);
+    for (const profile of tempFirstAllProfiles) {
+      if (
+        trips.every((trip) => Object.keys(trip.allProfiles).includes(profile))
+      ) {
+        tempYearlyProfile = {
+          shareCode: profile,
+          price: trips[0].allProfiles[profile][profileType],
+        };
+        break;
+      }
+    }
+  }
+  return tempYearlyProfile;
+}
