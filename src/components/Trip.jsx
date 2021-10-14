@@ -64,6 +64,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
           query={fromPlace}
           searchCategory="from"
         />
+        <br></br>
         <SearchBar
           setSelectedLocInfo={setToPlace}
           query={toPlace}
@@ -71,7 +72,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
         />
         <br></br>
         <label>
-          כמה פעמים בחודש בערך אני אעשה את הנסיעה
+          כמה פעמים בחודש בערך אני אעשה את הנסיעה{"  "}
           <input
             type="text"
             pattern="[0-9]*"
@@ -79,10 +80,12 @@ export default function Trip({ tripId, handleUpdateTrip }) {
             onInput={(e) => handleInput(e, setNumDays)}
             required
             autoComplete="off"
+            className="w-fit-s"
           ></input>
         </label>
+        <br></br>
         <label>
-          כמה ימים מתוך זה זה הלוך ושוב?
+          כמה ימים מתוך זה זה הלוך ושוב?{"  "}
           <input
             type="text"
             pattern="[0-9]*"
@@ -90,10 +93,15 @@ export default function Trip({ tripId, handleUpdateTrip }) {
             onInput={(e) => handleInput(e, setNumBackAndForthDays)}
             required
             autoComplete="off"
+            className="w-fit-s"
           ></input>
         </label>
         <br></br>
-        <input type="submit" value="סיימתי עם הנסיעה הזאת"></input>
+        <input
+          type="submit"
+          value="סיימתי עם הנסיעה הזאת"
+          className="w-fit"
+        ></input>
       </form>
     );
   } else {
