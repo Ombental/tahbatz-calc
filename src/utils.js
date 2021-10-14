@@ -216,3 +216,5 @@ export function getTempYearlyProfile(trips, profileType) {
   }
   return tempYearlyProfile;
 }
+
+export function getComplexPrices(trips) {}

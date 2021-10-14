@@ -4,7 +4,7 @@ import React from "react";
 import Trip from "./components/Trip";
 import {
   applyMotDiscount,
-  createSortedProfiles,
+  getComplexPrices,
   getTempYearlyProfile,
 } from "./utils";
 
@@ -43,22 +43,29 @@ function App() {
 
   const handleFinalCalc = () => {
     setFinalCalcOngoing(true);
+
     const motSum =
       applyMotDiscount(
         trips.reduce((a, b) => a + b.ravPassPrice[profileType], 0)
       ) * 12;
+
     const ravKavSum =
       trips.reduce((a, b) => a + b.ravKavPrice[profileType], 0) * 12;
-    let tempYearlyProfile = getTempYearlyProfile(tripsy, profileType);
 
-    let allComplexPrices = [];
+    const tempYearlyProfile = getTempYearlyProfile(trips, profileType);
+
+    const allComplexPrices = getComplexPrices(trips);
+
     setFinalCalcData({
       motSum: motSum,
       ravKavSum: ravKavSum,
       yearlyProfile: tempYearlyProfile,
+      complexPrices: allComplexPrices,
     });
+
     setFinalCalcOngoing(false);
   };
+
   if (finalCalcData !== null) {
     return (
       <div className="App">
@@ -86,6 +93,22 @@ function App() {
           </p>
         </div>
         <br></br>
+        <hr></hr>
+        <br></br>
+        <h3>הוצאות משולבות (פרופיל שנתי + רב פס)</h3>
+        <div>
+          {finalCalcData.complexPrices.map((complexPrice) => {
+            return (
+              <>
+                <p className="complex-price-box">
+                  קוד פרופיל: {complexPrice.shareCode}, מחיר פרופיל:{" "}
+                  {complexPrice.shareCodePrice}₪{"  "}|{"  "}
+                  מחיר רב פס: {complexPrice.ravPassPrice}₪
+                </p>
+              </>
+            );
+          })}
+        </div>
         {/* <button onClick={() => setFinalCalcData(null)}>
           אחלה, אני תכלס רוצה לערוך שוב
         </button> */}

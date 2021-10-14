@@ -44,3 +44,8 @@ input {
 .final-calc-loading {
   font-size: xx-large;
 }
+
+.complex-price-box {
+  border: 1px solid #ccc !important;
+  border-radius: 16px;
+}
