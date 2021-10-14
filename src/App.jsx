@@ -148,9 +148,10 @@ function App() {
             </li>
           );
         })}
-        {canAddTrip && (
-          <button onClick={() => handleAddTrip()}>הוספת נסיעה</button>
-        )}
+        {canAddTrip ||
+          (trips.length === 0 && (
+            <button onClick={() => handleAddTrip()}>הוספת נסיעה</button>
+          ))}
         <br></br>
         <br></br>
         <br></br>
