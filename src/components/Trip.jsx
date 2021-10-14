@@ -59,7 +59,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
 
   if (!finishedTrip) {
     return (
-      <form dir="rtl" onSubmit={handleOnSubmit}>
+      <form dir="rtl" onSubmit={handleOnSubmit} autoComplete={false}>
         <SearchBar
           setSelectedLocInfo={setFromPlace}
           query={fromPlace}
