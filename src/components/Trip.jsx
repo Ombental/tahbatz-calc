@@ -59,7 +59,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
 
   if (!finishedTrip) {
     return (
-      <form dir="rtl" onSubmit={handleOnSubmit} autoComplete={false}>
+      <form dir="rtl" onSubmit={handleOnSubmit} autoComplete="new-password">
         <SearchBar
           setSelectedLocInfo={setFromPlace}
           query={fromPlace}
@@ -79,6 +79,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
             value={numDays}
             onInput={(e) => handleInput(e, setNumDays)}
             required
+            autoComplete="off"
           ></input>
         </label>
         <label>
@@ -89,6 +90,7 @@ export default function Trip({ tripId, handleUpdateTrip }) {
             value={numBackAndForthDays}
             onInput={(e) => handleInput(e, setNumBackAndForthDays)}
             required
+            autoComplete="off"
           ></input>
         </label>
         <br></br>

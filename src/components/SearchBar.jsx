@@ -27,6 +27,7 @@ export default function SearchBar({
           }}
           onFocus={() => (isSearching ? null : setIsSearching(true))}
           required
+          autoComplete="off"
         ></input>
       </label>
       {locQuery !== "" && isFetching && isSearching ? (

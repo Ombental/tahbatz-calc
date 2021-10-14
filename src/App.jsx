@@ -56,6 +56,8 @@ function App() {
       };
     } else {
       console.log(trips);
+      // PER PROFILE CREATE PROFILE+RAVPASS ==> take profile, remove all trips that have this profile
+      // write profile + price. remaining trips -> add new line with remaining rav pass price (add sum?)
       const tempFirstAllProfiles = createSortedProfiles(trips[0].allProfiles);
       for (const profile of tempFirstAllProfiles) {
         if (
