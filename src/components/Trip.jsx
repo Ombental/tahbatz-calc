@@ -17,7 +17,6 @@ export default function Trip({ tripId, handleUpdateTrip }) {
 
   const handleInput = (e, setFunction) => {
     if (e.target.validity.valid) {
-      console.log(typeof e.target.value);
       setFunction(parseInt(e.target.value));
     }
   };
