@@ -7,6 +7,7 @@ import { applyMotDiscount, createSortedProfiles } from "./utils";
 function App() {
   const [trips, setTrips] = React.useState([]);
   const [finalCalcData, setFinalCalcData] = React.useState(null);
+  const [finalCalcOngoing, setFinalCalcOngoing] = React.useState(false);
   const [canAddTrip, setCanAddTrip] = React.useState(true);
   const [profileType, setProfileType] = React.useState("student");
 
@@ -37,6 +38,7 @@ function App() {
   };
 
   const handleFinalCalc = () => {
+    setFinalCalcOngoing(true);
     const motSum =
       applyMotDiscount(
         trips.reduce((a, b) => a + b.ravPassPrice[profileType], 0)
@@ -44,18 +46,17 @@ function App() {
     const ravKavSum =
       trips.reduce((a, b) => a + b.ravKavPrice[profileType], 0) * 12;
     const tempFirstCheapestShareCode = trips[0].cheapestProfile.shareCode;
-    let yearlyProfile = {};
+    let tempYearlyProfile = {};
     if (
       trips.every(
         (trip) => trip.cheapestProfile.shareCode === tempFirstCheapestShareCode
       )
     ) {
-      yearlyProfile = {
-        shareCode: trips[0].cheapestProfile[profileType],
-        price: trips[0].cheapestProfile.shareCode,
+      tempYearlyProfile = {
+        shareCode: trips[0].cheapestProfile.shareCode,
+        price: trips[0].cheapestProfile[profileType],
       };
     } else {
-      console.log(trips);
       // PER PROFILE CREATE PROFILE+RAVPASS ==> take profile, remove all trips that have this profile
       // write profile + price. remaining trips -> add new line with remaining rav pass price (add sum?)
       const tempFirstAllProfiles = createSortedProfiles(trips[0].allProfiles);
@@ -63,7 +64,7 @@ function App() {
         if (
           trips.every((trip) => Object.keys(trip.allProfiles).includes(profile))
         ) {
-          yearlyProfile = {
+          tempYearlyProfile = {
             shareCode: profile,
             price: trips[0].allProfiles[profile][profileType],
           };
@@ -74,21 +75,17 @@ function App() {
     setFinalCalcData({
       motSum: motSum,
       ravKavSum: ravKavSum,
-      yearlyProfile: {
-        price: yearlyProfile.price,
-        shareCode: yearlyProfile.shareCode,
-      },
+      yearlyProfile: tempYearlyProfile,
     });
+    setFinalCalcOngoing(false);
   };
-  console.log(finalCalcData !== null);
   if (finalCalcData !== null) {
-    console.log("WTF");
     return (
       <div className="App">
         <header className="App-header">
-          <p>מחשבון פרופיל לתחב"צ</p>
+          <p>אני בשחריה ורוצה לקחת אחריות על התקציב נסיעות</p>
         </header>
-        <label>
+        {/* <label>
           פרופיל
           <select value={profileType} onChange={handleProfileChange}>
             <option value="regular">רגיל</option>
@@ -97,14 +94,15 @@ function App() {
           </select>
         </label>
         <br></br>
-        <br></br>
+        <br></br> */}
         <div>
-          <p>ערך צבור: {finalCalcData.ravKavSum}</p>
-          <p>רב-פס(אפליקציה): {finalCalcData.motSum}</p>
+          <h1>הסכומים השנתיים הם</h1>
+          <p>ערך צבור: {finalCalcData.ravKavSum}₪</p>
+          <p>רב-פס(אפליקציה): {finalCalcData.motSum}₪</p>
           <p>
-            חופשי שנתי סטודנטיאלי: (קוד פרופיל){" "}
-            {finalCalcData.yearlyProfile.shareCode} ||{" "}
-            {finalCalcData.yearlyProfile.price}
+            חופשי שנתי סטודנטיאלי: {finalCalcData.yearlyProfile.price}₪{" "}
+            <br></br>
+            {finalCalcData.yearlyProfile.shareCode} קוד פרופיל
           </p>
         </div>
         <br></br>
@@ -113,20 +111,27 @@ function App() {
         </button> */}
       </div>
     );
+  } else if (finalCalcOngoing) {
+    <div className="App">
+      <header className="App-header">
+        <p>אני בשחריה ורוצה לקחת אחריות על התקציב נסיעות</p>
+      </header>
+      <div className="final-calc-loading">מחשב חישוב אחרון</div>
+    </div>;
   } else {
     return (
       <div className="App">
         <header className="App-header">
-          <p>מחשבון פרופיל לתחב"צ</p>
+          <p>אני בשחריה ורוצה לקחת אחריות על התקציב נסיעות</p>
         </header>
-        <label>
+        {/* <label>
           פרופיל
           <select value={profileType} onChange={handleProfileChange}>
             <option value="regular">רגיל</option>
             <option value="student">סטודנט</option>
             <option value="else">אחר</option>
           </select>
-        </label>
+        </label> */}
         {trips.map((trip, index) => {
           return (
             <li>
