@@ -17,17 +17,21 @@ export default function SearchBar({
   return (
     <>
       <label htmlFor={searchCategory}>
-        {searchCategory}
+        {searchCategory === "from" ? "תחנת מוצא" : "תחנת סיום"}
+        {"     "}
         <input
           type="text"
           name={searchCategory}
-          value={query ? query.split("::")[0] : locQuery}
+          value={
+            query ? (isSearching ? locQuery : query.split("::")[0]) : locQuery
+          }
           onChange={async (e) => {
             setLocQuery(e.target.value);
           }}
           onFocus={() => (isSearching ? null : setIsSearching(true))}
           required
           autoComplete="off"
+          className="w-fit"
         ></input>
       </label>
       {locQuery !== "" && isFetching && isSearching ? (
