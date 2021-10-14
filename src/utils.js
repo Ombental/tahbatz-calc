@@ -147,8 +147,8 @@ export function sortTripPriceData(prices, numDays, numBackAndForthDays) {
     if (Object.keys(sortedPriceData.ravPassPrice).length === 0) {
       sortedPriceData.ravPassPrice = {
         student:
-          price.totalMotPrice50 * numDays +
-          price.totalMot2Rides50 * numBackAndForthDays,
+          price.totalMotPrice33 * numDays +
+          price.totalMot2Rides33 * numBackAndForthDays,
         senior:
           price.totalMotPrice50 * numDays +
           price.totalMot2Rides50 * numBackAndForthDays,
