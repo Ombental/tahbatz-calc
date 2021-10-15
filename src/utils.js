@@ -234,7 +234,7 @@ export function getComplexPrices(trips, profileType, sharedProfile) {
       if (
         profile !== sharedProfile &&
         !Object.keys(allProfileCodes).includes(profile) &&
-        parseInt(trip.allProfiles[profile][profileType]) !== 0
+        parseInt(trip.allProfiles[profile][profileType]) > 0
       ) {
         allProfileCodes[profile] = trip.allProfiles[profile][profileType];
       }
