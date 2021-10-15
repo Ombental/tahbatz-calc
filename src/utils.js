@@ -125,10 +125,12 @@ export function sortTripPriceData(prices, numDays, numBackAndForthDays) {
     } else {
       sortedPriceData.ravKavPrice = {
         student:
-          price.totalCreditValue33 * numDays +
-          price.totalCreditValue33For2Rides * numBackAndForthDays,
-        student50:
           (sortedPriceData.ravKavPrice.student +
+            price.totalCreditValue33 * numDays +
+            price.totalCreditValue33For2Rides * numBackAndForthDays) /
+          2,
+        student50:
+          (sortedPriceData.ravKavPrice.student50 +
             price.totalCreditValue50 * numDays +
             price.totalCreditValue50For2Rides * numBackAndForthDays) /
           2,
