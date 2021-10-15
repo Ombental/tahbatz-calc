@@ -109,11 +109,17 @@ function App() {
               <>
                 <p className="complex-price-box">
                   קוד פרופיל: {complexPrice.shareCode}, מחיר פרופיל:{" "}
-                  {normalize(complexPrice.shareCodePrice)}₪{"  "}|{"  "}
+                  {normalize(complexPrice.shareCodePrice)}₪<br></br>
                   מחיר רב פס: {normalize(complexPrice.ravPassPrice)}₪ |{"  "}
-                  סה"כ {"  "}
+                  סה"כ עם רב פס {"  "}
                   {normalize(
                     complexPrice.ravPassPrice + complexPrice.shareCodePrice
+                  )}
+                  ₪<span className="give-me-some-space"></span> מחיר רב קו:{" "}
+                  {normalize(complexPrice.ravKavPrice)}₪ |{"  "}
+                  סה"כ עם רב קו {"  "}
+                  {normalize(
+                    complexPrice.ravKavPrice + complexPrice.shareCodePrice
                   )}
                   ₪
                 </p>

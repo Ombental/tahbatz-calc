@@ -58,3 +58,8 @@ input {
   width: 20px;
   text-align: center;
 }
+
+.give-me-some-space {
+  margin-left: 5vw;
+  margin-right: 5vw;
+}

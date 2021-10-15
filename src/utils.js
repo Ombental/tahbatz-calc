@@ -110,6 +110,9 @@ export function sortTripPriceData(prices, numDays, numBackAndForthDays) {
     if (Object.keys(sortedPriceData.ravKavPrice).length === 0) {
       sortedPriceData.ravKavPrice = {
         student:
+          price.totalCreditValue33 * numDays +
+          price.totalCreditValue33For2Rides * numBackAndForthDays,
+        student50:
           price.totalCreditValue50 * numDays +
           price.totalCreditValue50For2Rides * numBackAndForthDays,
         senior:
@@ -122,6 +125,9 @@ export function sortTripPriceData(prices, numDays, numBackAndForthDays) {
     } else {
       sortedPriceData.ravKavPrice = {
         student:
+          price.totalCreditValue33 * numDays +
+          price.totalCreditValue33For2Rides * numBackAndForthDays,
+        student50:
           (sortedPriceData.ravKavPrice.student +
             price.totalCreditValue50 * numDays +
             price.totalCreditValue50For2Rides * numBackAndForthDays) /
@@ -225,7 +231,8 @@ export function getComplexPrices(trips, profileType, sharedProfile) {
     for (const profile of Object.keys(trip.allProfiles)) {
       if (
         profile !== sharedProfile &&
-        !Object.keys(allProfileCodes).includes(profile)
+        !Object.keys(allProfileCodes).includes(profile) &&
+        parseInt(trip.allProfiles[profile][profileType]) !== 0
       ) {
         allProfileCodes[profile] = trip.allProfiles[profile][profileType];
       }
@@ -243,6 +250,8 @@ export function getComplexPrices(trips, profileType, sharedProfile) {
         applyMotDiscount(
           relevantTrips.reduce((a, b) => a + b.ravPassPrice[profileType], 0)
         ) * 12,
+      ravKavPrice:
+        relevantTrips.reduce((a, b) => a + b.ravKavPrice["student50"], 0) * 12,
     });
   }
 
