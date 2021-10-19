@@ -59,7 +59,108 @@ input {
   text-align: center;
 }
 
+ul {
+  list-style-type: none;
+  margin: 0;
+  margin-top: 5px;
+  padding: 0;
+}
+
 .give-me-some-space {
   margin-left: 5vw;
   margin-right: 5vw;
+}
+
+.custom-button {
+  backface-visibility: hidden;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  white-space: nowrap;
+  border-radius: 20px;
+  border: 2px solid
+    rgba(
+      0.01292370211694038%,
+      0.011978564958350552%,
+      0.012136087818115524%,
+      0.226
+    );
+  border-width: 2px 2px 2px 2px;
+  padding: 7px 10px 7px 10px;
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 1),
+    0px 1px 3px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 12px;
+  transition-duration: 0.55s;
+}
+
+.add-button {
+  margin-top: 5px;
+  background: rgba(16, 146, 16, 0.55);
+}
+
+.add-button:hover {
+  background: whitesmoke;
+  font-size: 16px;
+  color: green;
+}
+
+.remove-button {
+  background: linear-gradient(
+    180deg,
+    #f5000a 0%,
+    rgba(90.92902201990928%, 1.7361688936084905%, 13.370019301386849%, 0.682)
+      49%,
+    rgba(91.76773169732864%, -1.569822220060585%, 10.604641334381482%, 0.682)
+      51%,
+    rgba(91.76773169732864%, -1.569822220060585%, 10.604641334381482%, 0.389)
+      100%
+  );
+}
+
+.remove-button:hover {
+  background: whitesmoke;
+  color: #f5000a;
+  font-size: 16px;
+}
+
+.submit-button {
+  background: rgba(0, 0, 128, 0.55);
+  color: white;
+  margin-right: 5px;
+}
+
+.submit-button:hover {
+  background: whitesmoke;
+  color: navy;
+  font-size: 16px;
+}
+
+form {
+  display: inline;
+}
+
+.calc-text {
+  margin-top: 0;
+  direction: rtl;
+  font-size: larger;
+}
+
+.calc-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition-delay: 0.5;
+}
+
+.calc-icon {
+  font-size: xx-large;
+}
+
+.calc-button:hover .calc-icon {
+  font-size: 40px !important;
+}
+
+.calc-button:hover .calc-text {
+  font-size: 20px !important;
 }

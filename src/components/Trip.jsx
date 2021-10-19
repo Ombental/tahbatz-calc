@@ -1,12 +1,12 @@
 import React from "react";
 import axios from "axios";
-import classNames from "classnames";
 import SearchBar from "./SearchBar";
 import {
   prepareRequestBody,
   prepareInitialFilters,
   sortTripPriceData,
 } from "../utils";
+import { FaCheck } from "react-icons/fa";
 
 export default function Trip({
   tripId,
@@ -23,6 +23,8 @@ export default function Trip({
   const handleInput = (e, setFunction) => {
     if (e.target.validity.valid) {
       setFunction(parseInt(e.target.value));
+    } else if (e.target.value === "") {
+      setFunction("");
     }
   };
 
@@ -106,23 +108,20 @@ export default function Trip({
           ></input>
         </label>
         <br></br>
-        <input
-          type="submit"
-          value="סיימתי עם הנסיעה הזאת"
-          className="w-fit"
-        ></input>
+        <button type="submit" className="custom-button submit-button">
+          <FaCheck />
+        </button>
       </form>
     );
   } else {
     return (
       <>
-        <p>
+        <div onClick={handleEditTrip} className="finished-trip">
+          {tripId + 1}
           from: {fromPlace ? fromPlace.split("::")[0] : ""}, to:{" "}
           {toPlace ? toPlace.split("::")[0] : ""} || numDays: {numDays},
           backAndForth: {numBackAndForthDays}
-        </p>
-        <button onClick={handleEditTrip}>Edit again</button>
-        <br></br>
+        </div>
       </>
     );
   }

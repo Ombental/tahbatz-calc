@@ -1,4 +1,3 @@
-// import Iframe from "react-iframe";
 import "./App.css";
 import React from "react";
 import Trip from "./components/Trip";
@@ -8,6 +7,7 @@ import {
   getTempYearlyProfile,
   normalize,
 } from "./utils";
+import { FaTrash, FaPlus, FaCalculator } from "react-icons/fa";
 
 function App() {
   const [trips, setTrips] = React.useState([]);
@@ -153,31 +153,48 @@ function App() {
             <option value="else">אחר</option>
           </select>
         </label> */}
-        {trips.map((trip, index) => {
-          return (
-            <li>
-              <Trip
-                key={index}
-                tripId={index}
-                handleUpdateTrip={handleUpdateTrip}
-                setCanAddTrip={setCanAddTrip}
-                setLoadingTripData={setLoadingTripData}
-              />
-              {/* <button onClick={() => handleSubmitRow(index)}>SUBMIT</button> */}
-              <button onClick={() => handleDeleteTrip(index)}>X</button>
-              <hr></hr>
-            </li>
-          );
-        })}
+        <ul>
+          {trips.map((trip, index) => {
+            return (
+              <li>
+                <Trip
+                  key={index}
+                  tripId={index}
+                  handleUpdateTrip={handleUpdateTrip}
+                  setCanAddTrip={setCanAddTrip}
+                  setLoadingTripData={setLoadingTripData}
+                />
+                <button
+                  className="remove-button custom-button"
+                  onClick={() => handleDeleteTrip(index)}
+                >
+                  <FaTrash />
+                </button>
+                <hr></hr>
+              </li>
+            );
+          })}
+        </ul>
         {loadingTripData && <h1>LOADING</h1>}
         {(canAddTrip || trips.length === 0) && (
-          <button onClick={() => handleAddTrip()}>הוספת נסיעה</button>
+          <button
+            className="add-button custom-button"
+            onClick={() => handleAddTrip()}
+          >
+            <FaPlus />
+          </button>
         )}
         <br></br>
         <br></br>
         <br></br>
         {canAddTrip && trips.length > 0 && (
-          <button onClick={handleFinalCalc}>חישוב סופי</button>
+          <button onClick={handleFinalCalc} className="calc-button">
+            <FaCalculator className="calc-icon" />
+            <p className="calc-text">
+              יאללה <br />
+              מה ההמלצות?
+            </p>
+          </button>
         )}
       </div>
     );
